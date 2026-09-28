@@ -147,7 +147,7 @@ def repo_root() -> Path:
             check=True,
         )
         return Path(out.stdout.strip())
-    except OSError, subprocess.CalledProcessError:
+    except (OSError, subprocess.CalledProcessError):
         return Path.cwd()
 
 
