@@ -4,12 +4,17 @@
 # The 'set -e' command ensures that the script will exit immediately if a command fails.
 set -e
 
-echo "Configuring Rust toolchain..."
-if command -v rustup >/dev/null 2>&1; then
-    # Keep the image-provided rustup; avoid replacing it during container startup.
-    rustup update stable --no-self-update
-    rustup default stable
-    rustup component add rustfmt clippy rust-analyzer rust-src
+configure_git_identity() {
+    local key="$1" value="$2"
+    if [[ -n "$value" ]] && ! git config --global --get "$key" >/dev/null 2>&1; then
+        git config --global "$key" "$value"
+        echo "Set git $key from host environment."
+    fi
+}
+
+if command -v git >/dev/null 2>&1; then
+    configure_git_identity user.name "${GIT_USER_NAME:-}"
+    configure_git_identity user.email "${GIT_USER_EMAIL:-}"
 fi
 
 if [[ -f Cargo.toml ]]; then

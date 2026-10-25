@@ -34,3 +34,15 @@ artifacts/
 Thumbs.db
 
 scratchpad/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pycache/
+*.pytest_cache/
+*.mypy_cache/
+
+# CodeGraph
+.codegraph/

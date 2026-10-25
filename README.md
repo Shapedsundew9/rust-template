@@ -68,17 +68,26 @@ You can extend the template by adding modules under `src/` and updating dependen
 
 ### Dev Container
 
-The container setup updates the stable Rust toolchain and installs the configured
-components without self-updating rustup. The container image supplies rustup;
-rebuild with a refreshed base image to update it. This avoids the self-update
-path that can fail if another rustup process removes its temporary `rustup-init`
-file during startup.
+The container image installs the Rust toolchain and components specified in
+`rust-toolchain.toml` during the Docker build, without self-updating rustup.
+Post-create setup checks the project but does not update Rust. This keeps
+toolchain downloads out of startup, where editor tooling could otherwise run
+rustup concurrently and interfere with temporary download files.
+
+After changing `rust-toolchain.toml`, rebuild the container to install the new
+configuration. To refresh Rust and the image-provided rustup, use **Dev Containers:
+Rebuild Container Without Cache** so the toolchain installation runs again with
+a refreshed base image.
 
 If post-create setup previously failed, rerun it from the repository root:
 
 ```bash
 bash .devcontainer/post-create.sh
 ```
+
+To set your git identity in new containers, export `GIT_USER_NAME` and
+`GIT_USER_EMAIL` on the host where VS Code starts. Post-create setup copies each
+value into the container's global git config only when that setting is missing.
 
 ### Example
 
