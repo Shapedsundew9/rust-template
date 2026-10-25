@@ -6,7 +6,8 @@ set -e
 
 echo "Configuring Rust toolchain..."
 if command -v rustup >/dev/null 2>&1; then
-    rustup update stable
+    # Keep the image-provided rustup; avoid replacing it during container startup.
+    rustup update stable --no-self-update
     rustup default stable
     rustup component add rustfmt clippy rust-analyzer rust-src
 fi

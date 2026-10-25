@@ -66,6 +66,20 @@ protoproject
 
 You can extend the template by adding modules under `src/` and updating dependencies in `Cargo.toml`.
 
+### Dev Container
+
+The container setup updates the stable Rust toolchain and installs the configured
+components without self-updating rustup. The container image supplies rustup;
+rebuild with a refreshed base image to update it. This avoids the self-update
+path that can fail if another rustup process removes its temporary `rustup-init`
+file during startup.
+
+If post-create setup previously failed, rerun it from the repository root:
+
+```bash
+bash .devcontainer/post-create.sh
+```
+
 ### Example
 
 ```rust
@@ -94,6 +108,12 @@ Check code formatting:
 
 ```bash
 cargo fmt --check
+```
+
+Check the container setup script with isolated mock commands (no downloads):
+
+```bash
+bash tests/post-create.sh
 ```
 
 ## Scripts and Tools
